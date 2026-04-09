@@ -1,0 +1,174 @@
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { ArrowRight, Eye, EyeOff, TrendingUp, Users } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Link } from "react-router-dom";
+
+const socialStats = [
+  { platform: "Facebook", icon: <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.469h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>, color: "bg-[#1877F2] text-white", followers: "32.5K", growth: "+420%" },
+  { platform: "Instagram", icon: <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.062 1.366-.332 2.633-1.308 3.608-.975.975-2.242 1.245-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.062-2.633-.332-3.608-1.308-.975-.975-1.245-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975-2.242-1.245 3.608-1.308 1.266-.058-1.646-.07 4.85-.07zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>, color: "bg-gradient-to-br from-pink-500 to-orange-400 text-white", followers: "24.8K", growth: "+540%" },
+  { platform: "Twitter / X", icon: <svg className="w-4 h-4 text-background" fill="currentColor" viewBox="0 0 24 24"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg>, color: "bg-foreground text-background", followers: "15.3K", growth: "+310%" },
+];
+
+const Signup = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [activeIdx, setActiveIdx] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => setActiveIdx((p) => (p + 1) % 3), 2500);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="min-h-screen flex" style={{ background: "var(--gradient-hero)" }}>
+      {/* Left panel */}
+      <div className="hidden lg:flex lg:w-1/2 items-center justify-center relative overflow-hidden bg-muted/30">
+        <div className="absolute top-32 left-20 w-56 h-56 rounded-full opacity-[0.08] blur-3xl bg-primary" />
+        <div className="absolute bottom-20 right-16 w-72 h-72 rounded-full opacity-[0.06] blur-3xl bg-primary" />
+
+        <div className="relative z-10 max-w-md px-12">
+          <Link to="/" className="font-display text-2xl font-bold tracking-tight mb-10 block">
+            <span className="gradient-text">Velocity</span>
+          </Link>
+
+          <h2 className="text-3xl font-extrabold leading-tight text-foreground mb-3">
+            Start your brand's
+            <br />
+            intelligence era.
+          </h2>
+          <p className="text-muted-foreground text-base leading-relaxed mb-10">
+            Join thousands of creators who automate their growth with AI-powered agents.
+          </p>
+
+          {/* Social media growth cards */}
+          <div className="space-y-3 mb-8">
+            {socialStats.map((s, i) => (
+              <motion.div
+                key={s.platform}
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.12, duration: 0.4 }}
+                className={`flex items-center gap-4 rounded-xl px-5 py-4 transition-all duration-500 ${i === activeIdx
+                  ? "bg-card shadow-md border border-primary/15 scale-[1.02]"
+                  : "bg-card/60 border border-border"
+                  }`}
+              >
+                <div className={`w-9 h-9 rounded-lg flex items-center justify-center text-sm font-bold text-primary-foreground ${s.color}`}>
+                  {s.icon}
+                </div>
+                <div className="flex-1">
+                  <div className="text-sm font-semibold text-foreground">{s.platform}</div>
+                  <div className="text-xs text-muted-foreground">{s.followers} followers</div>
+                </div>
+                <div className="flex items-center gap-1 text-xs font-semibold text-primary">
+                  <TrendingUp size={13} />
+                  {s.growth}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Testimonial */}
+          <div className="bg-card rounded-xl p-5 border border-border shadow-sm mb-8">
+            <p className="text-sm italic text-muted-foreground mb-3">"Velocity took us from 200 to 12K followers in just 60 days."</p>
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center">
+                <Users size={13} className="text-primary" />
+              </div>
+              <div className="text-xs font-semibold text-foreground">Priya S. <span className="text-muted-foreground font-normal">· Founder, GlowCraft</span></div>
+            </div>
+          </div>
+
+          {/* Growth bar */}
+          <div className="flex items-end gap-1.5 h-10">
+            {[18, 30, 25, 42, 52, 45, 60, 70, 65, 82, 88, 100].map((h, i) => (
+              <motion.div
+                key={i}
+                initial={{ height: 0 }}
+                animate={{ height: `${h}%` }}
+                transition={{ delay: 0.5 + i * 0.05, duration: 0.4 }}
+                className="flex-1 rounded-sm gradient-bg opacity-60"
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Right panel — form */}
+      <div className="flex-1 flex items-center justify-center px-6 py-12">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="w-full max-w-md"
+        >
+          <Link to="/" className="lg:hidden font-display text-2xl font-bold tracking-tight mb-8 block">
+            <span className="gradient-text">Velocity</span>
+          </Link>
+
+          <h1 className="text-3xl font-bold mb-2">Create account</h1>
+          <p className="text-muted-foreground mb-8">
+            Already have an account?{" "}
+            <Link to="/login" className="text-primary font-semibold hover:underline">Sign in</Link>
+          </p>
+
+          <form className="space-y-5" onSubmit={(e) => e.preventDefault()}>
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="text-sm font-medium text-foreground mb-1.5 block">First name</label>
+                <Input type="text" placeholder="John" className="h-12 bg-card border-border focus:ring-2 focus:ring-primary/20" />
+              </div>
+              <div>
+                <label className="text-sm font-medium text-foreground mb-1.5 block">Last name</label>
+                <Input type="text" placeholder="Doe" className="h-12 bg-card border-border focus:ring-2 focus:ring-primary/20" />
+              </div>
+            </div>
+            <div>
+              <label className="text-sm font-medium text-foreground mb-1.5 block">Email</label>
+              <Input type="email" placeholder="you@example.com" className="h-12 bg-card border-border focus:ring-2 focus:ring-primary/20" />
+            </div>
+            <div>
+              <label className="text-sm font-medium text-foreground mb-1.5 block">Password</label>
+              <div className="relative">
+                <Input type={showPassword ? "text" : "password"} placeholder="Min 8 characters" className="h-12 bg-card border-border focus:ring-2 focus:ring-primary/20 pr-10" />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground">
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
+            </div>
+            <Button size="lg" className="w-full h-12 gradient-bg text-primary-foreground border-0 text-base" asChild>
+              <Link to="/">Create Account <ArrowRight size={18} className="ml-2" /></Link>
+            </Button>
+          </form>
+
+          <p className="text-xs text-muted-foreground text-center mt-6">
+            By signing up, you agree to our{" "}
+            <a href="#" className="text-primary hover:underline">Terms</a> and{" "}
+            <a href="#" className="text-primary hover:underline">Privacy Policy</a>.
+          </p>
+
+          <div className="relative my-8">
+            <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-border" /></div>
+            <div className="relative flex justify-center">
+              <span className="bg-background px-4 text-xs text-muted-foreground uppercase tracking-wider">or continue with</span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
+            <Button variant="outline" className="h-12">
+              <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" /><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" /><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" /><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" /></svg>
+              Google
+            </Button>
+            <Button variant="outline" className="h-12">
+              <svg className="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" /></svg>
+              Apple
+            </Button>
+          </div>
+        </motion.div>
+      </div>
+    </div>
+  );
+};
+
+export default Signup;
